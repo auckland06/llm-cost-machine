@@ -23,7 +23,7 @@ PROMPTS = [
     "Write a short paragraph explaining why sleep matters for athletes.",
     "How many integers from 1 to 100,000 have digits that add up to 23?",
 ]
-RUNS = 10
+RUNS = 1
 
 # Regex for the correct answer to each checkable prompt.
 # \b = word boundary, so \b300\b matches "300" but not "3000".
@@ -38,6 +38,7 @@ PRICES = {
     "gpt-6-luna": (0.10, 0.50),
     "claude-haiku-5-5": (0.10, 0.50),
     "gemini-3.8-flash": (0.75, 3.75),
+    "llama3.2:3b": (0.0, 0.0),
 }
 
 
@@ -60,6 +61,7 @@ openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 claude = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 gemini = genai.GenerativeModel("gemini-3.8-flash")
+local_client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
 
 
 # Each function makes one call and returns (cost, output_tokens, thinking_tokens, text)
@@ -74,7 +76,15 @@ def run_openai(prompt):
     reasoning = (details.reasoning_tokens or 0) if details else 0
     text = r.choices[0].message.content or ""
     return cost("gpt-6-luna", u.prompt_tokens, u.completion_tokens), u.completion_tokens, reasoning, text
-
+    
+def run_local(prompt):
+    r = local_client.chat.completions.create(
+        model="llama3.2:3b",
+        messages=[{"role": "user", "content": prompt}],
+    )
+    u = r.usage
+    text = r.choices[0].message.content or ""
+    return cost("llama3.2:3b", u.prompt_tokens, u.completion_tokens), u.completion_tokens, None, text
 
 def run_claude(prompt):
     m = claude.messages.create(
@@ -107,6 +117,7 @@ PROVIDERS = {
     "OpenAI": run_openai,
     "Claude": run_claude,
     "Gemini": run_gemini,
+    "Local": run_local,
 }
 
 # results[prompt][model] is a list of (cost, output_tokens, thinking_tokens, text) tuples
