@@ -27,13 +27,15 @@ On "Say hello in five words," about **98%** of what Gemini billed was hidden thi
 OpenAI used about **20** thinking tokens on an easy math word problem, about **90** on a coding task, and about **300** on the hard combinatorics problem. Gemini thought heavily on almost everything, including a simple paragraph. What's hard for a person isn't necessarily what makes a model think more.
 
 ### 3. Cost per call can be misleading. Cost per correct answer is what matters
-Hard problem: *"How many integers from 1 to 100,000 have digits that add up to 23?"* (correct answer: 6,000), 10 runs per model:
+Hard problem: *"How many integers from 1 to 100,000 have digits that add up to 23?"* (correct answer: 6,000), 10 runs per model in a single session:
 
 | Model | Correct | Avg cost per call | Approx. cost per 1,000 correct answers |
 |---|---|---|---|
-| OpenAI | 10/10 | $0.00023 | ~$0.23 |
-| Claude | 9/10 | $0.00045 | ~$0.50 |
-| Gemini | 9/10 | $0.0096 | ~$10.70 |
+| OpenAI | 10/10 | $0.00022 | ~$0.22 |
+| Claude | 9/10 | $0.00046 | ~$0.51 |
+| Gemini | 10/10 | $0.0090 | ~$8.99 |
+
+Results were consistent across multiple sessions: costs stayed within a few percent, and the ranking didn't change.
 
 Gemini's higher cost comes from two factors that multiply: it uses more tokens (mostly thinking) **and** it charges more per token.
 
