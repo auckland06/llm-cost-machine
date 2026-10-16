@@ -27,7 +27,7 @@ RUNS = 5
 
 # Regex for the correct answer to each checkable prompt.
 # \b = word boundary, so \b300\b matches "300" but not "3000".
-# ,? = optional comma, so it matches both "6000" and "6,000".
+# Commas and LaTeX formatting are stripped in is_correct() before matching.
 EXPECTED = {
     "What is the capital of Australia?": r"\bCanberra\b",
     "A train travels 180 miles in 3 hours. How many miles does it travel in 5 hours?": r"\b300\b",
@@ -155,9 +155,3 @@ for prompt in PROMPTS:
             else:
                 print("  Cost/correct:  N/A (no correct answers)")
         print()
-hard = "How many integers from 1 to 100,000 have digits that add up to 23?"
-for name in ["OpenAI", "Claude", "Gemini"]:
-    print(f"\n===== {name} =====")
-    for row in results[hard][name]:
-        print("-----")
-        print(row[3][-300:])  # last 300 characters, where the final answer usually is
