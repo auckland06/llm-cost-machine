@@ -15,6 +15,8 @@ import google.generativeai as genai
 
 load_dotenv()
 
+USE_LOCAL = False  # set True only when the SSH tunnel to the Pi is running
+
 PROMPTS = [
     "Say hello in five words.",
     "What is the capital of Australia?",
@@ -117,8 +119,9 @@ PROVIDERS = {
     "OpenAI": run_openai,
     "Claude": run_claude,
     "Gemini": run_gemini,
-    "Local": run_local,
 }
+if USE_LOCAL:
+    PROVIDERS["Local"] = run_local
 
 # results[prompt][model] is a list of (cost, output_tokens, thinking_tokens, text) tuples
 results = {prompt: {name: [] for name in PROVIDERS} for prompt in PROMPTS}
