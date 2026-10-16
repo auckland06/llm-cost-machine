@@ -23,7 +23,7 @@ PROMPTS = [
     "Write a short paragraph explaining why sleep matters for athletes.",
     "How many integers from 1 to 100,000 have digits that add up to 23?",
 ]
-RUNS = 5
+RUNS = 10
 
 # Regex for the correct answer to each checkable prompt.
 # \b = word boundary, so \b300\b matches "300" but not "3000".
